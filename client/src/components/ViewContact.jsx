@@ -7,9 +7,18 @@ import NotesIcon from "@mui/icons-material/Notes";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
 
-const ViewContact = ({ selectedContactId, setSelectedContactId }) => {
+const EMPTY_CONTACT_DETAILS = {
+  name: "",
+  email: "",
+  phone: "",
+  notes: "",
+};
+
+const ViewContact = ({ selectedContactId }) => {
+  const [contactDetails, setContactDetails] = useState(EMPTY_CONTACT_DETAILS);
+
   useEffect(() => {
-    const fetchContact = async (selectedContactId) => {
+    const fetchContact = async () => {
       try {
         const response = await fetch(
           `http://localhost:8080/contacts/${selectedContactId}`
@@ -18,36 +27,37 @@ const ViewContact = ({ selectedContactId, setSelectedContactId }) => {
           throw new Error("Error fetching contact details");
         }
         const data = await response.json();
-        console.log(data);
-        setSelectedContactId(data);
+        setContactDetails(data);
       } catch (error) {
         console.error("Error fetching contact details: ", error);
       }
     };
-    console.log(fetchContact(selectedContactId));
-  }, [selectedContactId, setSelectedContactId]);
+    fetchContact();
+  }, [selectedContactId]);
 
   if (!selectedContactId) {
     return <CircularProgress />;
   }
 
+  const { name, email, phone, notes } = contactDetails;
+
   return (
     <Box>
       <Typography variant="h5" sx={{ color: "#1C468E" }}>
         <PersonIcon sx={{ color: "#000000" }} /> <span> </span>
-        {selectedContactId.name}
+        {name}
       </Typography>
       <Typography>
         <EmailIcon /> <span> </span>
-        {selectedContactId.email}
+        {email}
       </Typography>
       <Typography>
         <PhoneIcon /> <span> </span>
-        {selectedContactId.phone}
+        {phone}
       </Typography>
       <Typography>
         <NotesIcon /> <span> </span>
-        {selectedContactId.notes}
+        {notes}
       </Typography>
     </Box>
   );
