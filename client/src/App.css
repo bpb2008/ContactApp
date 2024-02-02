@@ -10,3 +10,8 @@ form {
     margin-top: 10px; 
 }
 
+.edit {
+    display: flex; 
+    flex-direction: row;
+    margin-top: 20px;
+}

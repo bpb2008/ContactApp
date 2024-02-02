@@ -11,7 +11,6 @@ const CreateContact = ({ setContacts }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ name, email, phone, notes });
 
     try {
       const response = await fetch("http://localhost:8080/addContact", {

@@ -43,14 +43,11 @@ function App() {
           sx={{
             ...paperStyles,
             width: "500px",
-            height: "325px",
+            height: "355px",
             marginBottom: "10px",
           }}
         >
-          <Typography variant="h4" sx={{ marginTop: "30px" }}>
-            Contact List App
-          </Typography>
-          <Typography sx={{ marginBottom: "30px" }}>
+          <Typography sx={{ marginBottom: "10px", marginTop: "10px" }}>
             Select a contact from the list to view details.
           </Typography>
           {selectedContactId && (
@@ -66,7 +63,7 @@ function App() {
           sx={{
             ...paperStyles,
             width: "500px",
-            height: "425px",
+            height: "395px",
             marginTop: "10px",
             justifyContent: "center",
           }}
@@ -83,6 +80,9 @@ function App() {
           paddingTop: "20px",
         }}
       >
+        <Typography variant="h5" sx={{ marginTop: "10px" }}>
+          Contact List App
+        </Typography>
         <Contacts
           setSelectedContactId={setSelectedContactId}
           contacts={contacts}

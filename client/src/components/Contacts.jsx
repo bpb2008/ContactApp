@@ -6,7 +6,12 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
-import { useEffect } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useEffect, useState } from "react";
 import { fetchContacts } from "../fetchContacts";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
@@ -14,6 +19,9 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [contactToDelete, setContactToDelete] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       const contactsData = await fetchContacts();
@@ -22,12 +30,25 @@ const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
     fetchData();
   }, []);
 
+  const openDeleteConfirmation = (contactId) => {
+    setContactToDelete(contactId);
+    setDeleteConfirmationOpen(true);
+  };
+
+  const closeDeleteConfirmation = () => {
+    setContactToDelete(null);
+    setDeleteConfirmationOpen(false);
+  };
+
   const deleteContact = async (contactId) => {
     await fetch(`http://localhost:8080/contacts/${contactId}`, {
       method: "DELETE",
     });
+
     const refreshedListData = await fetchContacts();
     setContacts(refreshedListData);
+
+    closeDeleteConfirmation();
   };
 
   const handleContactClick = (contactId) => {
@@ -69,7 +90,7 @@ const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
               <TableCell>{contact.phone}</TableCell>
               <Button
                 variant="text"
-                onClick={() => deleteContact(contact.contact_id)}
+                onClick={() => openDeleteConfirmation(contact.contact_id)}
               >
                 <ClearIcon sx={{ marginTop: "15px" }} />
               </Button>
@@ -77,6 +98,27 @@ const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
           ))}
         </TableBody>
       </Table>
+
+      <Dialog open={deleteConfirmationOpen} onClose={closeDeleteConfirmation}>
+        <DialogTitle id="alert-dialog-title">{"Delete Contact"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this contact?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteConfirmation} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => deleteContact(contactToDelete)}
+            color="primary"
+            autoFocus
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </TableContainer>
   );
 };

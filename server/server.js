@@ -64,6 +64,24 @@ app.post("/addContact", async (req, res) => {
   }
 });
 
+app.put("/editContact/:id", async (req, res) => {
+  const contactId = req.params.id;
+  const { newName, newEmail, newPhone, newNotes } = req.body;
+  try {
+    const result = await pool.query(
+      "UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE contact_id = $5",
+      [newName, newEmail, newPhone, newNotes, contactId]
+    );
+    res.json({
+      success: true,
+      message: `Entry with ID ${contactId} updated successfully.`,
+    });
+  } catch (error) {
+    console.error("Error updating contact: ", error);
+    res.status(500).json({ error: "Internal Service Error" });
+  }
+});
+
 app.delete("/contacts/:id", async (req, res) => {
   const contactId = req.params.id;
   try {
