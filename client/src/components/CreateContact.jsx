@@ -28,7 +28,6 @@ const CreateContact = ({ setContacts }) => {
       const result = await response.json();
       const refreshedListData = await fetchContacts();
       setContacts(refreshedListData);
-      console.log("Contact created: ", result);
       setName("");
       setEmail("");
       setPhone("");

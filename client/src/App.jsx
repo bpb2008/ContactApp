@@ -54,6 +54,7 @@ function App() {
             <ViewContact
               selectedContactId={selectedContactId}
               setSelectedContactId={setSelectedContactId}
+              setContacts={setContacts}
             />
           )}
         </Paper>

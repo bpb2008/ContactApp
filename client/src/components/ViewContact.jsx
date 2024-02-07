@@ -6,17 +6,12 @@ import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import { fetchContacts } from "../fetchContacts";
 
-const EMPTY_CONTACT_DETAILS = {
-  name: "",
-  email: "",
-  phone: "",
-  notes: "",
-};
-
-const ViewContact = ({ selectedContactId }) => {
-  const [contactDetails, setContactDetails] = useState(EMPTY_CONTACT_DETAILS);
+const ViewContact = ({ selectedContactId, setContacts }) => {
   const [editButtonClicked, setEditButtonClicked] = useState(false);
-  const [contactToEdit, setContactToEdit] = useState();
+  const [newName, setNewName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [newNotes, setNewNotes] = useState("");
 
   useEffect(() => {
     const fetchContact = async () => {
@@ -28,7 +23,10 @@ const ViewContact = ({ selectedContactId }) => {
           throw new Error("Error fetching contact details");
         }
         const data = await response.json();
-        setContactDetails(data);
+        setNewName(data.name);
+        setNewEmail(data.email);
+        setNewPhone(data.phone);
+        setNewNotes(data.notes);
       } catch (error) {
         console.error("Error fetching contact details: ", error);
       }
@@ -40,40 +38,36 @@ const ViewContact = ({ selectedContactId }) => {
     return <CircularProgress />;
   }
 
-  const { name, email, phone, notes } = contactDetails;
-
-  const editContact = (e) => {
-    e.preventDefault();
+  const editContact = () => {
     setEditButtonClicked(true);
-    handleEdit();
   };
 
-  const handleEdit = async (newData) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:8080/contacts/${selectedContactId}`,
+        `http://localhost:8080/editContact/${selectedContactId}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(newData),
+          body: JSON.stringify({ newName, newEmail, newPhone, newNotes }),
         }
       );
 
       const result = await response.json();
-      console.log("result test");
-      console.log(result);
 
       const refreshedListData = await fetchContacts();
-      setContactDetails(refreshedListData);
-      console.log("Contact edited: ", result);
+      setContacts(refreshedListData);
 
       if (!response.ok) {
         throw new Error("Failed to edit contact");
       }
     } catch (error) {
       console.error("Error updating entry: ", error);
+    } finally {
+      setEditButtonClicked(false);
     }
   };
 
@@ -89,44 +83,39 @@ const ViewContact = ({ selectedContactId }) => {
         flexDirection: "column",
       }}
     >
+      {/* Separate edit button clicked into its own file */}
       {editButtonClicked ? (
-        <form onSubmit={handleEdit}>
+        <form onSubmit={handleSubmit}>
           <TextField
             variant="filled"
             sx={{ width: "400px" }}
-            onChange={(e) =>
-              setContactToEdit({ ...contactToEdit, name: e.target.value })
-            }
-          >
-            {name}
-          </TextField>
+            label="Name"
+            value={newName}
+            onChange={(e) => {
+              setNewName(e.target.value);
+            }}
+          />
           <TextField
             variant="filled"
             sx={{ width: "400px" }}
-            onChange={(e) =>
-              setContactToEdit({ ...contactToEdit, email: e.target.value })
-            }
-          >
-            {email}
-          </TextField>
+            label="Email"
+            value={newEmail}
+            onChange={(e) => setNewEmail(e.target.value)}
+          />
           <TextField
             variant="filled"
             sx={{ width: "400px" }}
-            onChange={(e) =>
-              setContactToEdit({ ...contactToEdit, phone: e.target.value })
-            }
-          >
-            {phone}
-          </TextField>
+            label="phone"
+            value={newPhone}
+            onChange={(e) => setNewPhone(e.target.value)}
+          />
           <TextField
             variant="filled"
             sx={{ width: "400px" }}
-            onChange={(e) =>
-              setContactToEdit({ ...contactToEdit, notes: e.target.value })
-            }
-          >
-            {notes}
-          </TextField>
+            label="Notes"
+            value={newNotes}
+            onChange={(e) => setNewNotes(e.target.value)}
+          />
           <div className="edit">
             <Button
               type="submit"
@@ -150,11 +139,11 @@ const ViewContact = ({ selectedContactId }) => {
           }}
         >
           <Typography variant="h4" sx={{ color: "#1C468E", marginTop: "40px" }}>
-            {name}
+            {newName}
           </Typography>
-          <Typography sx={{ fontSize: "20px" }}>{email}</Typography>
-          <Typography sx={{ fontSize: "20px" }}>{phone}</Typography>
-          <Typography sx={{ fontSize: "15px" }}>{notes}</Typography>
+          <Typography sx={{ fontSize: "20px" }}>{newEmail}</Typography>
+          <Typography sx={{ fontSize: "20px" }}>{newPhone}</Typography>
+          <Typography sx={{ fontSize: "15px" }}>{newNotes}</Typography>
           <Button
             variant="contained"
             sx={{ marginTop: "10px" }}

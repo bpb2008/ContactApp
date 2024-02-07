@@ -23,7 +23,7 @@ const pool = new Pool({
 
 app.get("/contacts", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM contacts");
+    const result = await pool.query("SELECT * FROM contacts ORDER BY name ASC");
     res.json(result.rows);
   } catch (error) {
     console.log("Error fetching contact list: ", error);
@@ -68,7 +68,7 @@ app.put("/editContact/:id", async (req, res) => {
   const contactId = req.params.id;
   const { newName, newEmail, newPhone, newNotes } = req.body;
   try {
-    const result = await pool.query(
+    await pool.query(
       "UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE contact_id = $5",
       [newName, newEmail, newPhone, newNotes, contactId]
     );

@@ -61,16 +61,16 @@ const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
         <TableHead sx={{ textAlign: "center" }}>
           <TableRow>
             <TableCell>
-              <PersonIcon />
-              &nbsp;Name
+              <PersonIcon sx={{ marginRight: "10px" }} />
+              Name
             </TableCell>
             <TableCell>
-              <EmailIcon />
-              &nbsp;Email
+              <EmailIcon sx={{ marginRight: "10px" }} />
+              Email
             </TableCell>
             <TableCell>
-              <PhoneIcon />
-              &nbsp;Phone
+              <PhoneIcon sx={{ marginRight: "5px" }} />
+              Phone
             </TableCell>
             <TableCell>{/* <DeleteIcon /> */}</TableCell>
           </TableRow>
@@ -88,12 +88,14 @@ const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
               </TableCell>
               <TableCell>{contact.email}</TableCell>
               <TableCell>{contact.phone}</TableCell>
-              <Button
-                variant="text"
-                onClick={() => openDeleteConfirmation(contact.contact_id)}
-              >
-                <ClearIcon sx={{ marginTop: "15px" }} />
-              </Button>
+              <TableCell>
+                <Button
+                  variant="text"
+                  onClick={() => openDeleteConfirmation(contact.contact_id)}
+                >
+                  <ClearIcon sx={{ marginTop: "15px" }} />
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
