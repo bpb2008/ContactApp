@@ -1,5 +1,7 @@
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import { useEffect, useState } from "react";
 import EditContactForm from "./EditContactForm";
 import IndividualContact from "./IndividualContact";
@@ -11,6 +13,8 @@ const ViewContact = ({ selectedContactId, setContacts }) => {
   const [newEmail, setNewEmail] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [newNotes, setNewNotes] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
     const fetchContact = async () => {
@@ -65,6 +69,8 @@ const ViewContact = ({ selectedContactId, setContacts }) => {
       }
     } catch (error) {
       console.error("Error updating entry: ", error);
+      setSnackbarMessage("Error editing contact. Please try again.");
+      setOpenSnackbar(true);
     } finally {
       setEditButtonClicked(false);
     }
@@ -74,37 +80,52 @@ const ViewContact = ({ selectedContactId, setContacts }) => {
     setEditButtonClicked(false);
   };
 
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-      }}
-    >
-      {editButtonClicked ? (
-        <EditContactForm
-          cancelEdit={cancelEdit}
-          handleSubmit={handleSubmit}
-          setNewName={setNewName}
-          setNewEmail={setNewEmail}
-          setNewPhone={setNewPhone}
-          setNewNotes={setNewNotes}
-          newName={newName}
-          newEmail={newEmail}
-          newPhone={newPhone}
-          newNotes={newNotes}
-        />
-      ) : (
-        <IndividualContact
-          editContact={editContact}
-          newName={newName}
-          newEmail={newEmail}
-          newPhone={newPhone}
-          newNotes={newNotes}
-        />
-      )}
-    </Box>
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
+        {editButtonClicked ? (
+          <EditContactForm
+            cancelEdit={cancelEdit}
+            handleSubmit={handleSubmit}
+            setNewName={setNewName}
+            setNewEmail={setNewEmail}
+            setNewPhone={setNewPhone}
+            setNewNotes={setNewNotes}
+            newName={newName}
+            newEmail={newEmail}
+            newPhone={newPhone}
+            newNotes={newNotes}
+          />
+        ) : (
+          <IndividualContact
+            editContact={editContact}
+            newName={newName}
+            newEmail={newEmail}
+            newPhone={newPhone}
+            newNotes={newNotes}
+          />
+        )}
+      </Box>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity="error">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 
