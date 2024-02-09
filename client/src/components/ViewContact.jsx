@@ -1,9 +1,8 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
+import EditContactForm from "./EditContactForm";
+import IndividualContact from "./IndividualContact";
 import { fetchContacts } from "../fetchContacts";
 
 const ViewContact = ({ selectedContactId, setContacts }) => {
@@ -56,7 +55,7 @@ const ViewContact = ({ selectedContactId, setContacts }) => {
         }
       );
 
-      const result = await response.json();
+      await response.json();
 
       const refreshedListData = await fetchContacts();
       setContacts(refreshedListData);
@@ -83,75 +82,27 @@ const ViewContact = ({ selectedContactId, setContacts }) => {
         flexDirection: "column",
       }}
     >
-      {/* Separate edit button clicked into its own file */}
       {editButtonClicked ? (
-        <form onSubmit={handleSubmit}>
-          <TextField
-            variant="filled"
-            sx={{ width: "400px" }}
-            label="Name"
-            value={newName}
-            onChange={(e) => {
-              setNewName(e.target.value);
-            }}
-          />
-          <TextField
-            variant="filled"
-            sx={{ width: "400px" }}
-            label="Email"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-          />
-          <TextField
-            variant="filled"
-            sx={{ width: "400px" }}
-            label="phone"
-            value={newPhone}
-            onChange={(e) => setNewPhone(e.target.value)}
-          />
-          <TextField
-            variant="filled"
-            sx={{ width: "400px" }}
-            label="Notes"
-            value={newNotes}
-            onChange={(e) => setNewNotes(e.target.value)}
-          />
-          <div className="edit">
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{ marginRight: "20px" }}
-            >
-              Submit Edit
-            </Button>
-            <Button variant="contained" onClick={cancelEdit}>
-              Cancel
-            </Button>
-          </div>
-        </form>
+        <EditContactForm
+          cancelEdit={cancelEdit}
+          handleSubmit={handleSubmit}
+          setNewName={setNewName}
+          setNewEmail={setNewEmail}
+          setNewPhone={setNewPhone}
+          setNewNotes={setNewNotes}
+          newName={newName}
+          newEmail={newEmail}
+          newPhone={newPhone}
+          newNotes={newNotes}
+        />
       ) : (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Typography variant="h4" sx={{ color: "#1C468E", marginTop: "40px" }}>
-            {newName}
-          </Typography>
-          <Typography sx={{ fontSize: "20px" }}>{newEmail}</Typography>
-          <Typography sx={{ fontSize: "20px" }}>{newPhone}</Typography>
-          <Typography sx={{ fontSize: "15px" }}>{newNotes}</Typography>
-          <Button
-            variant="contained"
-            sx={{ marginTop: "10px" }}
-            onClick={editContact}
-          >
-            Edit Contact
-          </Button>
-        </Box>
+        <IndividualContact
+          editContact={editContact}
+          newName={newName}
+          newEmail={newEmail}
+          newPhone={newPhone}
+          newNotes={newNotes}
+        />
       )}
     </Box>
   );
