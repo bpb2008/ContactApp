@@ -15,6 +15,12 @@ const ViewContact = ({ selectedContactId, setContacts }) => {
   const [newNotes, setNewNotes] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [originalData, setOriginalData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    notes: "",
+  });
 
   useEffect(() => {
     const fetchContact = async () => {
@@ -30,6 +36,12 @@ const ViewContact = ({ selectedContactId, setContacts }) => {
         setNewEmail(data.email);
         setNewPhone(data.phone);
         setNewNotes(data.notes);
+        setOriginalData({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          notes: data.notes,
+        });
       } catch (error) {
         console.error("Error fetching contact details: ", error);
       }
@@ -70,6 +82,10 @@ const ViewContact = ({ selectedContactId, setContacts }) => {
     } catch (error) {
       console.error("Error updating entry: ", error);
       setSnackbarMessage("Error editing contact. Please try again.");
+      setNewName(originalData.name);
+      setNewEmail(originalData.email);
+      setNewPhone(originalData.phone);
+      setNewNotes(originalData.notes);
       setOpenSnackbar(true);
     } finally {
       setEditButtonClicked(false);
