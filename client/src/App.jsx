@@ -13,7 +13,6 @@ function App() {
 
   const containerStyles = {
     display: "flex",
-    position: "relative",
     alignItems: "stretch",
     width: "100%",
   };

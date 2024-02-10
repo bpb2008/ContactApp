@@ -19,12 +19,15 @@ This is a full stack PERN (PostgreSQL, Express.js, React.js, and Node.js) web ap
    ```
 
 4. Configure your backend project environment variables by creating a `.env` file in the server folder and adding the following, replacing each <> with your own information:
-   `` LOCALHOST_DATABASE_URL=<Postgres database URL including the Postgres username, password, domain, port, and database name in the localhost environment.>`
+
+```
+LOCALHOST_DATABASE_URL=<Postgres database URL including the Postgres username, password, domain, port, and database name in the localhost environment.>`
 DATABASE_USERNAME=<Database username>`
 DATABASE_PASSWORD=<Your database password, if applicable. If none, leave blank.>`
 DATABASE=<The name of your database, "contacts" or whatever you chose to name it.>`
 DATABASE_PORT=<Port specific to the database.>`
 PORT=<Port the server should listen on.>`
-LOCALHOST_URL=<URL where the frontend is hosted for the CORS configuration, such as http://localhost:5173/> ``
+LOCALHOST_URL=<URL where the frontend is hosted for the CORS configuration, such as http://localhost:5173/>
+```
 
 5. To run the project, `cd` to both `client` and `server` folders and run `npm run dev` in both to start the server and launch the frontend in your browser.
