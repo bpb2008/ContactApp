@@ -9,7 +9,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import ClearIcon from "@mui/icons-material/Clear";
 
-const ContactTable = ({
+const ContactsTable = ({
   contacts,
   handleContactClick,
   openDeleteConfirmation,
@@ -61,4 +61,4 @@ const ContactTable = ({
   );
 };
 
-export default ContactTable;
+export default ContactsTable;

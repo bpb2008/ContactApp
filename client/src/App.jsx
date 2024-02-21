@@ -3,6 +3,7 @@ import { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 import CreateContact from "./components/CreateContact";
 import ViewContact from "./components/ViewContact";
 import Contacts from "./components/Contacts";
@@ -13,11 +14,17 @@ function App() {
 
   const containerStyles = {
     display: "flex",
-    alignItems: "stretch",
+    alignItems: "center",
     width: "100%",
   };
 
   const paperStyles = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  };
+
+  const boxStyles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -37,13 +44,13 @@ function App() {
           width: "1085px",
           height: "50px",
           marginBottom: "15px",
-          marginLeft: "45px",
           "@media (max-width:800px": {
             width: "500px",
           },
           "@media (max-width:400px)": {
             width: "400px",
           },
+          justifyContent: "center",
         }}
       >
         <Typography
@@ -58,9 +65,9 @@ function App() {
           Contact List App
         </Typography>
       </Paper>
-      <Container
+      <Box
         sx={{
-          ...containerStyles,
+          ...boxStyles,
           flexDirection: "row",
           "@media (max-width:800px)": {
             flexWrap: "wrap",
@@ -68,9 +75,9 @@ function App() {
           },
         }}
       >
-        <Container
+        <Box
           sx={{
-            ...containerStyles,
+            ...boxStyles,
             flexDirection: "column",
             "@media (max-width:800px)": {
               width: "100%",
@@ -117,12 +124,12 @@ function App() {
           >
             <CreateContact setContacts={setContacts} />
           </Paper>
-        </Container>
+        </Box>
         <Paper
           elevation={1}
           sx={{
             ...paperStyles,
-            width: "1000px",
+            width: "600px",
             height: "770px",
             "@media (max-width:400px)": {
               width: "400px",
@@ -136,7 +143,7 @@ function App() {
             setContacts={setContacts}
           />
         </Paper>
-      </Container>
+      </Box>
     </Container>
   );
 }

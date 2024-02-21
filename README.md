@@ -6,7 +6,7 @@ This is a full stack PERN (PostgreSQL, Express.js, React.js, and Node.js) web ap
 
 1. Clone the project.
 2. Install dependencies by running `npm install` in the both `client` and `server` folders.
-3. Create a database Postgres named `contacts`, then create a table `contacts` with the following schema:
+3. Create a Postgres database named `contacts`, then create a table `contacts` with the following schema:
 
    ```
    CREATE TABLE contacts (
