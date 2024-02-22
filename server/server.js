@@ -52,6 +52,12 @@ app.get("/contacts/:id", async (req, res) => {
 app.post("/addContact", async (req, res) => {
   const { name, email, phone, notes } = req.body;
 
+  if (!name || !email || !phone) {
+    return res
+      .status(400)
+      .json({ error: "Name, Email, and Phone are required fields." });
+  }
+
   try {
     const result = await pool.query(
       "INSERT INTO contacts (name, email, phone, notes) VALUES($1, $2, $3, $4) RETURNING *",
