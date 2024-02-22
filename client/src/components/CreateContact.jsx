@@ -12,9 +12,23 @@ const CreateContact = ({ setContacts }) => {
   const [notes, setNotes] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [nameError, setNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!name || !email || !phone) {
+      setNameError(!name);
+      setEmailError(!email);
+      setPhoneError(!phone);
+      return;
+    }
+
+    setNameError(false);
+    setEmailError(false);
+    setPhoneError(false);
 
     try {
       const response = await fetch("http://localhost:8080/addContact", {
@@ -65,6 +79,8 @@ const CreateContact = ({ setContacts }) => {
           label="Name"
           variant="filled"
           sx={{ ...textfieldStyles }}
+          error={nameError}
+          helperText={nameError && "Please enter a name."}
         />
         <TextField
           id="email"
@@ -73,6 +89,8 @@ const CreateContact = ({ setContacts }) => {
           label="Email"
           variant="filled"
           sx={{ ...textfieldStyles }}
+          error={emailError}
+          helperText={emailError && "Please enter an email address."}
         />
         <TextField
           id="phone"
@@ -81,6 +99,8 @@ const CreateContact = ({ setContacts }) => {
           label="Phone"
           variant="filled"
           sx={{ ...textfieldStyles }}
+          error={phoneError}
+          helperText={phoneError && "Please enter a phone number."}
         />
         <TextField
           id="notes"

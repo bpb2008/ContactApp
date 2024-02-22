@@ -41,7 +41,7 @@ function App() {
         elevation={1}
         sx={{
           ...paperStyles,
-          width: "1085px",
+          width: "1120px",
           height: "50px",
           marginBottom: "15px",
           "@media (max-width:800px": {
@@ -130,6 +130,7 @@ function App() {
           sx={{
             ...paperStyles,
             width: "600px",
+            marginLeft: "15px",
             height: "770px",
             "@media (max-width:400px)": {
               width: "400px",
