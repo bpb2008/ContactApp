@@ -59,6 +59,19 @@ app.post("/addContact", async (req, res) => {
   }
 
   try {
+    const checkForDuplicate = await pool.query(
+      "SELECT * FROM contacts WHERE email = $1 or phone = $2",
+      [email, phone]
+    );
+
+    if (checkForDuplicate.rows.length > 0) {
+      return res
+        .status(400)
+        .json({
+          error: "Contact with the same email or phone already exists.",
+        });
+    }
+
     const result = await pool.query(
       "INSERT INTO contacts (name, email, phone, notes) VALUES($1, $2, $3, $4) RETURNING *",
       [name, email, phone, notes]

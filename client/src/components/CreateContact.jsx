@@ -40,10 +40,18 @@ const CreateContact = ({ setContacts }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create contact");
+        const checkForDuplicates = await response.json();
+        if (checkForDuplicates.error.includes("duplicate key")) {
+          setSnackbarMessage(
+            "Contact with the same email or phone already exists."
+          );
+        } else {
+          setSnackbarMessage("Error creating contact. Please try again.");
+        }
+        setOpenSnackbar(true);
+        return;
       }
 
-      await response.json();
       const refreshedListData = await fetchContacts();
       setContacts(refreshedListData);
       setName("");
