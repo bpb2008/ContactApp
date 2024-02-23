@@ -15,7 +15,7 @@ const ContactsTable = ({
   openDeleteConfirmation,
 }) => {
   return (
-    <Table>
+    <Table stickyHeader>
       <TableHead sx={{ textAlign: "center" }}>
         <TableRow>
           <TableCell>
