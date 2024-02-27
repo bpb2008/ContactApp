@@ -2,13 +2,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-const IndividualContact = ({
-  newName,
-  newEmail,
-  newPhone,
-  newNotes,
-  editContact,
-}) => {
+const IndividualContact = ({ contactData, editContact }) => {
+  const { newName, newEmail, newPhone, newNotes } = contactData;
+
   return (
     <Box
       sx={{
@@ -24,15 +20,13 @@ const IndividualContact = ({
       <Typography sx={{ fontSize: "20px" }}>{newEmail}</Typography>
       <Typography sx={{ fontSize: "20px" }}>{newPhone}</Typography>
       <Typography sx={{ fontSize: "15px" }}>{newNotes}</Typography>
-      {newName && (
-        <Button
-          variant="contained"
-          sx={{ marginTop: "10px" }}
-          onClick={editContact}
-        >
-          Edit Contact
-        </Button>
-      )}
+      <Button
+        variant="contained"
+        sx={{ marginTop: "10px" }}
+        onClick={editContact}
+      >
+        Edit Contact
+      </Button>
     </Box>
   );
 };

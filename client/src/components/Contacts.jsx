@@ -7,12 +7,9 @@ import ContactsTable from "./ContactsTable";
 
 const Contacts = ({
   setSelectedContactId,
+  selectedContactId,
   setContacts,
   contacts,
-  setNewName,
-  setNewEmail,
-  setNewPhone,
-  setNewNotes,
 }) => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState(null);
@@ -42,10 +39,10 @@ const Contacts = ({
 
     const refreshedListData = await fetchContacts();
     setContacts(refreshedListData);
-    setNewName("");
-    setNewEmail("");
-    setNewPhone("");
-    setNewNotes("");
+
+    if (selectedContactId === contactId) {
+      setSelectedContactId(null);
+    }
 
     closeDeleteConfirmation();
   };

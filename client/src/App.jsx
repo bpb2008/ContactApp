@@ -11,10 +11,6 @@ import Contacts from "./components/Contacts";
 function App() {
   const [selectedContactId, setSelectedContactId] = useState(null);
   const [contacts, setContacts] = useState([]);
-  const [newName, setNewName] = useState("");
-  const [newEmail, setNewEmail] = useState("");
-  const [newPhone, setNewPhone] = useState("");
-  const [newNotes, setNewNotes] = useState("");
 
   const containerStyles = {
     display: "flex",
@@ -109,14 +105,6 @@ function App() {
                 selectedContactId={selectedContactId}
                 setSelectedContactId={setSelectedContactId}
                 setContacts={setContacts}
-                setNewName={setNewName}
-                setNewEmail={setNewEmail}
-                setNewPhone={setNewPhone}
-                setNewNotes={setNewNotes}
-                newName={newName}
-                newEmail={newEmail}
-                newPhone={newPhone}
-                newNotes={newNotes}
               />
             )}
           </Paper>
@@ -154,10 +142,7 @@ function App() {
             setSelectedContactId={setSelectedContactId}
             contacts={contacts}
             setContacts={setContacts}
-            setNewName={setNewName}
-            setNewEmail={setNewEmail}
-            setNewPhone={setNewPhone}
-            setNewNotes={setNewNotes}
+            selectedContactId={selectedContactId}
           />
         </Paper>
       </Box>

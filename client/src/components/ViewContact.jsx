@@ -7,26 +7,21 @@ import EditContactForm from "./EditContactForm";
 import IndividualContact from "./IndividualContact";
 import { fetchContacts } from "../fetchContacts";
 
-const ViewContact = ({
-  selectedContactId,
-  setContacts,
-  newPhone,
-  newEmail,
-  newName,
-  newNotes,
-  setNewName,
-  setNewEmail,
-  setNewPhone,
-  setNewNotes,
-}) => {
+const ViewContact = ({ selectedContactId, setContacts }) => {
   const [editButtonClicked, setEditButtonClicked] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [originalData, setOriginalData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    notes: "",
+  const [contactData, setContactData] = useState({
+    newName: "",
+    newEmail: "",
+    newPhone: "",
+    newNotes: "",
+    originalData: {
+      name: "",
+      email: "",
+      phone: "",
+      notes: "",
+    },
   });
 
   useEffect(() => {
@@ -39,16 +34,19 @@ const ViewContact = ({
           throw new Error("Error fetching contact details");
         }
         const data = await response.json();
-        setNewName(data.name);
-        setNewEmail(data.email);
-        setNewPhone(data.phone);
-        setNewNotes(data.notes);
-        setOriginalData({
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          notes: data.notes,
-        });
+        setContactData((previousData) => ({
+          ...previousData,
+          newName: data.name,
+          newEmail: data.email,
+          newPhone: data.phone,
+          newNotes: data.notes,
+          originalData: {
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            notes: data.notes,
+          },
+        }));
       } catch (error) {
         console.error("Error fetching contact details: ", error);
       }
@@ -56,10 +54,13 @@ const ViewContact = ({
     fetchContact();
 
     if (!selectedContactId) {
-      setNewName("");
-      setNewEmail("");
-      setNewPhone("");
-      setNewNotes("");
+      setContactData((previousData) => ({
+        ...previousData,
+        newName: "",
+        newEmail: "",
+        newPhone: "",
+        newNotes: "",
+      }));
     }
   }, [selectedContactId]);
 
@@ -81,7 +82,7 @@ const ViewContact = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ newName, newEmail, newPhone, newNotes }),
+          body: JSON.stringify(contactData),
         }
       );
 
@@ -96,10 +97,13 @@ const ViewContact = ({
     } catch (error) {
       console.error("Error updating entry: ", error);
       setSnackbarMessage("Error editing contact. Please try again.");
-      setNewName(originalData.name);
-      setNewEmail(originalData.email);
-      setNewPhone(originalData.phone);
-      setNewNotes(originalData.notes);
+      setContactData((previousData) => ({
+        ...previousData,
+        newName: previousData.originalData.name,
+        newEmail: previousData.originalData.email,
+        newPhone: previousData.originalData.phone,
+        newNotes: previousData.originalData.notes,
+      }));
       setOpenSnackbar(true);
     } finally {
       setEditButtonClicked(false);
@@ -127,22 +131,13 @@ const ViewContact = ({
           <EditContactForm
             cancelEdit={cancelEdit}
             handleSubmit={handleSubmit}
-            setNewName={setNewName}
-            setNewEmail={setNewEmail}
-            setNewPhone={setNewPhone}
-            setNewNotes={setNewNotes}
-            newName={newName}
-            newEmail={newEmail}
-            newPhone={newPhone}
-            newNotes={newNotes}
+            setContactData={setContactData}
+            contactData={contactData}
           />
         ) : (
           <IndividualContact
             editContact={editContact}
-            newName={newName}
-            newEmail={newEmail}
-            newPhone={newPhone}
-            newNotes={newNotes}
+            contactData={contactData}
           />
         )}
       </Box>
