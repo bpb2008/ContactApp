@@ -65,11 +65,9 @@ app.post("/addContact", async (req, res) => {
     );
 
     if (checkForDuplicate.rows.length > 0) {
-      return res
-        .status(400)
-        .json({
-          error: "Contact with the same email or phone already exists.",
-        });
+      return res.status(400).json({
+        error: "Contact with the same email or phone already exists.",
+      });
     }
 
     const result = await pool.query(
@@ -87,11 +85,11 @@ app.put("/editContact/:id", async (req, res) => {
   const contactId = req.params.id;
   const { newName, newEmail, newPhone, newNotes } = req.body;
   try {
-    await pool.query(
-      "UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE contact_id = $5",
+    const result = await pool.query(
+      "UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE contact_id = $5 RETURNING contact_id",
       [newName, newEmail, newPhone, newNotes, contactId]
     );
-    res.json({
+    res.json(result.rows[0], {
       success: true,
       message: `Entry with ID ${contactId} updated successfully.`,
     });

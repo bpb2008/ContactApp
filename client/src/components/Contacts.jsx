@@ -5,7 +5,15 @@ import { fetchContacts } from "../fetchContacts";
 import DeleteConfirmation from "./DeleteConfirmation";
 import ContactsTable from "./ContactsTable";
 
-const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
+const Contacts = ({
+  setSelectedContactId,
+  setContacts,
+  contacts,
+  setNewName,
+  setNewEmail,
+  setNewPhone,
+  setNewNotes,
+}) => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState(null);
 
@@ -34,6 +42,10 @@ const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
 
     const refreshedListData = await fetchContacts();
     setContacts(refreshedListData);
+    setNewName("");
+    setNewEmail("");
+    setNewPhone("");
+    setNewNotes("");
 
     closeDeleteConfirmation();
   };

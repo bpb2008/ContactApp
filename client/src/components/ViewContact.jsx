@@ -7,12 +7,19 @@ import EditContactForm from "./EditContactForm";
 import IndividualContact from "./IndividualContact";
 import { fetchContacts } from "../fetchContacts";
 
-const ViewContact = ({ selectedContactId, setContacts }) => {
+const ViewContact = ({
+  selectedContactId,
+  setContacts,
+  newPhone,
+  newEmail,
+  newName,
+  newNotes,
+  setNewName,
+  setNewEmail,
+  setNewPhone,
+  setNewNotes,
+}) => {
   const [editButtonClicked, setEditButtonClicked] = useState(false);
-  const [newName, setNewName] = useState("");
-  const [newEmail, setNewEmail] = useState("");
-  const [newPhone, setNewPhone] = useState("");
-  const [newNotes, setNewNotes] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [originalData, setOriginalData] = useState({
@@ -47,6 +54,13 @@ const ViewContact = ({ selectedContactId, setContacts }) => {
       }
     };
     fetchContact();
+
+    if (!selectedContactId) {
+      setNewName("");
+      setNewEmail("");
+      setNewPhone("");
+      setNewNotes("");
+    }
   }, [selectedContactId]);
 
   if (!selectedContactId) {
