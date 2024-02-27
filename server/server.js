@@ -24,7 +24,7 @@ const pool = new Pool({
 app.get("/contacts", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM contacts ORDER BY name ASC");
-    res.json(result.rows);
+    res.status(200).json(result.rows);
   } catch (error) {
     console.log("Error fetching contact list: ", error);
     res.status(500).json({ error: "Internal Service Error" });
@@ -41,7 +41,7 @@ app.get("/contacts/:id", async (req, res) => {
     if (result.rows.length === 0) {
       res.status(404).json({ error: "Contact not found!" });
     } else {
-      res.json(result.rows[0]);
+      res.status(200).json(result.rows[0]);
     }
   } catch (error) {
     console.log("Error fetching individual contact details: ", error);
@@ -74,7 +74,7 @@ app.post("/addContact", async (req, res) => {
       "INSERT INTO contacts (name, email, phone, notes) VALUES($1, $2, $3, $4) RETURNING *",
       [name, email, phone, notes]
     );
-    res.json(result.rows[0]);
+    res.status(200).json(result.rows[0]);
   } catch (error) {
     console.log("Error adding new contact: ", error);
     res.status(500).json({ error: "Internal Service Error" });
@@ -89,7 +89,7 @@ app.put("/editContact/:id", async (req, res) => {
       "UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE contact_id = $5 RETURNING contact_id",
       [newName, newEmail, newPhone, newNotes, contactId]
     );
-    res.json(result.rows[0], {
+    res.status(200).json(result.rows[0], {
       success: true,
       message: `Entry with ID ${contactId} updated successfully.`,
     });

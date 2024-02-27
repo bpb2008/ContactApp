@@ -24,13 +24,15 @@ const IndividualContact = ({
       <Typography sx={{ fontSize: "20px" }}>{newEmail}</Typography>
       <Typography sx={{ fontSize: "20px" }}>{newPhone}</Typography>
       <Typography sx={{ fontSize: "15px" }}>{newNotes}</Typography>
-      <Button
-        variant="contained"
-        sx={{ marginTop: "10px" }}
-        onClick={editContact}
-      >
-        Edit Contact
-      </Button>
+      {newName && (
+        <Button
+          variant="contained"
+          sx={{ marginTop: "10px" }}
+          onClick={editContact}
+        >
+          Edit Contact
+        </Button>
+      )}
     </Box>
   );
 };
