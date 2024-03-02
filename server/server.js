@@ -83,18 +83,26 @@ app.post("/addContact", async (req, res) => {
 
 app.put("/editContact/:id", async (req, res) => {
   const contactId = req.params.id;
-  const { newName, newEmail, newPhone, newNotes } = req.body;
+  const { name, email, phone, notes } = req.body;
+
   try {
     const result = await pool.query(
       "UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE contact_id = $5 RETURNING contact_id",
-      [newName, newEmail, newPhone, newNotes, contactId]
+      [name, email, phone, notes, contactId]
     );
-    res.status(200).json(result.rows[0], {
+
+    if (result.rowCount === 0) {
+      res.status(404).json({ error: "Contact not found" });
+      return;
+    }
+
+    res.status(200).json({
       success: true,
       message: `Entry with ID ${contactId} updated successfully.`,
     });
   } catch (error) {
     console.error("Error updating contact: ", error);
+
     res.status(500).json({ error: "Internal Service Error" });
   }
 });

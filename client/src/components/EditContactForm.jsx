@@ -8,7 +8,14 @@ const EditContactForm = ({
   setContactData,
   contactData,
 }) => {
-  const { newName, newEmail, newPhone, newNotes } = contactData;
+  const { name, email, phone, notes } = contactData;
+
+  const onInputChanged = (key, value) =>
+    setContactData((previousData) => ({
+      ...previousData,
+      [key]: value,
+    }));
+
   return (
     <form onSubmit={handleSubmit}>
       <Box
@@ -24,49 +31,29 @@ const EditContactForm = ({
           variant="filled"
           sx={{ width: "400px" }}
           label="Name"
-          value={newName}
-          onChange={(e) => {
-            setContactData((previousData) => ({
-              ...previousData,
-              newName: e.target.value,
-            }));
-          }}
+          value={name}
+          onChange={(e) => onInputChanged("name", e.target.value)}
         />
         <TextField
           variant="filled"
           sx={{ width: "400px" }}
           label="Email"
-          value={newEmail}
-          onChange={(e) => {
-            setContactData((previousData) => ({
-              ...previousData,
-              newEmail: e.target.value,
-            }));
-          }}
+          value={email}
+          onChange={(e) => onInputChanged("email", e.target.value)}
         />
         <TextField
           variant="filled"
           sx={{ width: "400px" }}
           label="phone"
-          value={newPhone}
-          onChange={(e) => {
-            setContactData((previousData) => ({
-              ...previousData,
-              newPhone: e.target.value,
-            }));
-          }}
+          value={phone}
+          onChange={(e) => onInputChanged("phone", e.target.value)}
         />
         <TextField
           variant="filled"
           sx={{ width: "400px" }}
           label="Notes"
-          value={newNotes}
-          onChange={(e) => {
-            setContactData((previousData) => ({
-              ...previousData,
-              newNotes: e.target.value,
-            }));
-          }}
+          value={notes}
+          onChange={(e) => onInputChanged("notes", e.target.value)}
         />
         <Box sx={{ display: "flex", flexDirection: "row", marginTop: "20px" }}>
           <Button
