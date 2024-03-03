@@ -3,18 +3,23 @@ import TableContainer from "@mui/material/TableContainer";
 import { useEffect, useState } from "react";
 import { fetchContacts } from "../fetchContacts";
 import DeleteConfirmation from "./DeleteConfirmation";
-import ContactTable from "./ContactTable";
+import ContactsTable from "./ContactsTable";
 
-const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
+const Contacts = ({
+  setSelectedContactId,
+  selectedContactId,
+  setContacts,
+  contacts,
+}) => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const loadPageContacts = async () => {
       const contactsData = await fetchContacts();
       setContacts(contactsData);
     };
-    fetchData();
+    loadPageContacts();
   }, []);
 
   const openDeleteConfirmation = (contactId) => {
@@ -35,6 +40,10 @@ const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
     const refreshedListData = await fetchContacts();
     setContacts(refreshedListData);
 
+    if (selectedContactId === contactId) {
+      setSelectedContactId(null);
+    }
+
     closeDeleteConfirmation();
   };
 
@@ -44,7 +53,7 @@ const Contacts = ({ setSelectedContactId, setContacts, contacts }) => {
 
   return (
     <TableContainer component={Box}>
-      <ContactTable
+      <ContactsTable
         contacts={contacts}
         handleContactClick={handleContactClick}
         openDeleteConfirmation={openDeleteConfirmation}

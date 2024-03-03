@@ -24,7 +24,7 @@ const pool = new Pool({
 app.get("/contacts", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM contacts ORDER BY name ASC");
-    res.json(result.rows);
+    res.status(200).json(result.rows);
   } catch (error) {
     console.log("Error fetching contact list: ", error);
     res.status(500).json({ error: "Internal Service Error" });
@@ -41,7 +41,7 @@ app.get("/contacts/:id", async (req, res) => {
     if (result.rows.length === 0) {
       res.status(404).json({ error: "Contact not found!" });
     } else {
-      res.json(result.rows[0]);
+      res.status(200).json(result.rows[0]);
     }
   } catch (error) {
     console.log("Error fetching individual contact details: ", error);
@@ -52,12 +52,29 @@ app.get("/contacts/:id", async (req, res) => {
 app.post("/addContact", async (req, res) => {
   const { name, email, phone, notes } = req.body;
 
+  if (!name || !email || !phone) {
+    return res
+      .status(400)
+      .json({ error: "Name, Email, and Phone are required fields." });
+  }
+
   try {
+    const checkForDuplicate = await pool.query(
+      "SELECT * FROM contacts WHERE email = $1 or phone = $2",
+      [email, phone]
+    );
+
+    if (checkForDuplicate.rows.length > 0) {
+      return res.status(400).json({
+        error: "Contact with the same email or phone already exists.",
+      });
+    }
+
     const result = await pool.query(
       "INSERT INTO contacts (name, email, phone, notes) VALUES($1, $2, $3, $4) RETURNING *",
       [name, email, phone, notes]
     );
-    res.json(result.rows[0]);
+    res.status(200).json(result.rows[0]);
   } catch (error) {
     console.log("Error adding new contact: ", error);
     res.status(500).json({ error: "Internal Service Error" });
@@ -66,18 +83,26 @@ app.post("/addContact", async (req, res) => {
 
 app.put("/editContact/:id", async (req, res) => {
   const contactId = req.params.id;
-  const { newName, newEmail, newPhone, newNotes } = req.body;
+  const { name, email, phone, notes } = req.body;
+
   try {
-    await pool.query(
-      "UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE contact_id = $5",
-      [newName, newEmail, newPhone, newNotes, contactId]
+    const result = await pool.query(
+      "UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE contact_id = $5 RETURNING contact_id",
+      [name, email, phone, notes, contactId]
     );
-    res.json({
+
+    if (result.rowCount === 0) {
+      res.status(404).json({ error: "Contact not found" });
+      return;
+    }
+
+    res.status(200).json({
       success: true,
       message: `Entry with ID ${contactId} updated successfully.`,
     });
   } catch (error) {
     console.error("Error updating contact: ", error);
+
     res.status(500).json({ error: "Internal Service Error" });
   }
 });

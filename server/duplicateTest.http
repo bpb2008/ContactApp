@@ -1,0 +1,10 @@
+
+POST http://localhost:8080/addContact
+Content-Type: application/json; 
+
+{
+    "name": "Brittany Thompson", 
+    "email": "bpb2008@gmail.com", 
+    "phone": "281-217-1589", 
+    "notes": "testing 123"
+}
